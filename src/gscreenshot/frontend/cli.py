@@ -1,4 +1,6 @@
 from gscreenshot import Gscreenshot
+from gscreenshot.screenshooter.scrot import Scrot
+from gscreenshot.screenshooter.imlib_2 import Imlib2
 from gscreenshot.frontend import SignalHandler
 
 import argparse
@@ -6,8 +8,15 @@ import sys
 
 def run():
 
-    gscreenshot = Gscreenshot()
     parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        '-sb',
+        '--shooter',
+        required=False,
+        default="scrot",
+        help="The screenshot backend to use. Supported options are 'scrot' and 'imlib2'. If you have slop or scrot installed, you likely have both on your system. The default is scrot."
+        )
 
     parser.add_argument(
         '-d',
@@ -39,6 +48,13 @@ def run():
         )
 
     args = parser.parse_args()
+
+    if (args.shooter == "imlib2"):
+        shooter = Imlib2()
+    else:
+        shooter = Scrot()
+
+    gscreenshot = Gscreenshot(shooter)
 
     if (args.version is not False):
         authors = gscreenshot.get_program_authors()
