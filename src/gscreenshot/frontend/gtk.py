@@ -123,6 +123,7 @@ class Controller(object):
         if (appinfo is not None):
             print(fname)
             appinfo.launch_uris(["file://"+fname], None)
+            self.quit(None)
 
     def on_button_copy_clicked(self, *args):
         """
@@ -143,6 +144,8 @@ class Controller(object):
                 Gtk.BUTTONS_OK, "Please install xdg-open to open files.")
             md.run()
             md.destroy()
+        else:
+            self.quit(None)
 
     def on_button_about_clicked(self, *args):
         # make the main window unsensitive while viewing the "about"
@@ -241,7 +244,7 @@ class OpenWithDialog(Gtk.AppChooserDialog):
 
     def __init__(self, parent=None):
 
-        Gtk.AppChooserDialog.__init__(self, content_type="image/png", parent=parent)
+        Gtk.AppChooserDialog.__init__(self, content_type="image/png", transient_for=parent)
         self.set_title("Choose an Application")
         self.connect("response", self._on_response)
         self.appinfo = None
